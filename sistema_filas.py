@@ -48,13 +48,13 @@ def registar():
     servico = input("Escolha o servico: ")
 
     if servico == "1":
-        sala, medico = "Sala 1", "Dr. Joao Paulo"
+        sala, medico = "Sala 1", "Dr. Afonso Orlando"
     elif servico == "2":
-        sala, medico = "Sala 2", "Dra. Luisa Kiala"
+        sala, medico = "Sala 2", "Dra. Kassako Madia"
     elif servico == "3":
-        sala, medico = "Sala 3", "Dra. Fernanda Mulemba"
+        sala, medico = "Sala 3", "Dra. Langa Maria"
     else:
-        sala, medico = "Sala 4", "Dr. Carlos Mbanza"
+        sala, medico = "Sala 4", "Dr. Matondo Mauricio"
 
     print("1 - Emergencia | 2 - Gravida | 3 - Idoso | 4 - Deficiencia | 5 - Normal")
     prioridade = input("Escolha a prioridade: ")
@@ -124,6 +124,80 @@ def consultar():
             print(f"\nEncontrado: {u['nome']} | Idade: {u['idade']} | {u['prioridade']} | {u['sala']} | {u['medico']}")
             return
     print("Utente nao encontrado na fila. Pode ja ter sido atendido.")
+medicos = []
+atendidos = []
+
+def eliminar_utente():
+    if not fila:
+        print("Nenhum utente na fila.")
+        return
+    mostrar_fila()
+    senha = input("Digite a senha do utente a eliminar: ")
+    for u in fila:
+        if str(u['senha']) == str(senha):
+            fila.remove(u)
+            print(f"Utente {u['nome']} eliminado!")
+            return
+    print("Senha não encontrada.")
+
+def editar_utente():
+    if not fila:
+        print("Nenhum utente na fila.")
+        return
+    mostrar_fila()
+    senha = input("Digite a senha do utente a editar: ")
+    for u in fila:
+        if str(u['senha']) == str(senha):
+            print(f"A editar: {u['nome']} - Deixe em branco para não alterar")
+            novo_nome = input("Novo nome: ")
+            if novo_nome:
+                u['nome'] = novo_nome
+            nova_idade = input("Nova idade: ")
+            if nova_idade:
+                u['idade'] = nova_idade
+            print("Utente actualizado!")
+            return
+    print("Senha não encontrada.")
+
+def ver_todos_utentes():
+    print("\n--- TODOS OS UTENTES ---")
+    print("NA FILA (Não atendidos):")
+    if not fila:
+        print("Nenhum na fila.")
+    else:
+        for u in fila:
+            print(f"Senha: {u['senha']} | {u['nome']} | Idade: {u['idade']} | Prioridade: {u['prioridade']} | NÃO ATENDIDO")
+    print("\nJÁ ATENDIDOS:")
+    if not atendidos:
+        print("Nenhum atendido ainda.")
+    else:
+        for u in atendidos:
+            print(f"Senha: {u['senha']} | {u['nome']} | ATENDIDO")
+    print("------------------------")
+
+def relatorios():
+    print("\n--- RELATÓRIO ---")
+    print(f"Na fila (não atendidos): {len(fila)}")
+    print(f"Já atendidos: {len(atendidos)}")
+    print(f"Total: {len(fila) + len(atendidos)}")
+    print(f"Total de médicos: {len(medicos)}")
+    ver_todos_utentes()
+
+def registar_medico():
+    print("\n--- REGISTAR MÉDICO ---")
+    nome = input("Nome do médico: ")
+    especialidade = input("Especialidade: ")
+    telefone = input("Telefone: ")
+    medicos.append({'nome': nome, 'especialidade': especialidade, 'telefone': telefone})
+    print(f"Médico {nome} registado!")
+
+def ver_medicos():
+    if not medicos:
+        print("Nenhum médico registado.")
+        return
+    print("\n--- MÉDICOS ---")
+    for i, m in enumerate(medicos, 1):
+        print(f"{i}. {m['nome']} | {m['especialidade']} | Tel: {m['telefone']}")
 
 #Menu principal
 while True:
@@ -132,6 +206,12 @@ while True:
     print("2 - Ver fila")
     print("3 - Chamar proximo")
     print("4 - Consultar pela senha")
+    print("5 - Eliminar utente")
+    print("6 - Editar utente")
+    print("7 - Ver todos os utentes")
+    print("8 - Relatórios")
+    print("9 - Registar médico")
+    print("10 - Ver médicos")
     print("0 - Sair")
     opcao = input("Escolha: ")
 
@@ -143,8 +223,22 @@ while True:
         chamar()
     elif opcao == "4":
         consultar()
+    elif opcao == "5":
+        eliminar_utente()
+    elif opcao == "6":
+        editar_utente()
+    elif opcao == "7":
+        ver_todos_utentes()
+    elif opcao == "8":
+        relatorios()
+    elif opcao == "9":
+        registar_medico()
+    elif opcao == "10":
+        ver_medicos()
+
     elif opcao == "0":
         print("A sair... Obrigado!")
         break
     else:
         print("Opcao invalida.")
+
